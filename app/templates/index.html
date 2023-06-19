@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Main Page</title>
+    <style>
+        .context-form {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Make a prediction</h1>
+    <h2>You can check avaiable option for Chromosome Names in here: http://127.0.0.1:5000/available_chromosomes</h2>
+    <form id="context-form" action="/predict" method="POST">
+        <label for="numContexts">How many Genomic Contexts:</label><br>
+        <input type="number" id="numContexts" name="numContexts" min="1">
+        <button id="generate">Generate fields</button>
+    
+        <div id="contexts"></div>
+    
+        <button id="predict" type="submit">Predict</button>
+    </form>
+    <p id="prediction-result"></p>
+
+    <script>
+        document.getElementById('generate').addEventListener('click', function (event) {
+            event.preventDefault();  // Prevent the form from being submitted when 'Generate fields' is clicked
+            var numContexts = document.getElementById('numContexts').value;
+
+            var container = document.getElementById('contexts');
+            container.innerHTML = '';
+
+            for (var i = 0; i < numContexts; i++) {
+                var div = document.createElement('div'); 
+                div.classList.add('context-form');
+                div.innerHTML = `
+                    <label for="isIntergenic${i}">Is it intergenic (Context ${i+1}):</label><br>
+                    <select id="isIntergenic${i}" name="isIntergenic${i}">
+                        <option value='True'>True</option>
+                        <option value='False'>False</option>
+                    </select><br>
+                    <label for="isUpstream${i}">Is it upstream (Context ${i+1}):</label><br>
+                    <select id="isUpstream${i}" name="isUpstream${i}">
+                        <option value='True'>True</option>
+                        <option value='False'>False</option>
+                    </select><br>
+                    <label for="isDownstream${i}">Is it downstream (Context ${i+1}):</label><br>
+                    <select id="isDownstream${i}" name="isDownstream${i}">
+                        <option value='True'>True</option>
+                        <option value='False'>False</option>
+                    </select><br>
+                    <label for="distance${i}">What is the distance (Context ${i+1}):</label><br>
+                    <input type="text" id="distance${i}" name="distance${i}"><br>
+                    <label for="chromosomeName${i}">Name of chromosome it's located (Context ${i+1}):</label><br>
+                    <input type="text" id="chromosomeName${i}" name="chromosomeName${i}"><br>
+                    <label for="chromosomePosition${i}">It's position in the chromosome (Context ${i+1}):</label><br>
+                    <input type="text" id="chromosomePosition${i}" name="chromosomePosition${i}"><br>
+                `;
+                container.appendChild(div);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
